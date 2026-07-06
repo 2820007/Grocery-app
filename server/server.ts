@@ -8,6 +8,7 @@ import orderRouter from "./routes/orderRoutes.js";
 
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js"
+import addressRouter from "./routes/addressRoutes.js";
 
 const app = express();
 
@@ -34,6 +35,9 @@ app.use("/api/orders",orderRouter)
 //inngest
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
+
+//Address
+app.use("/api/addresses",addressRouter)
 
 // Error handling
 app.use((error:any, req:Request,res:Response,next:NextFunction)=>{
