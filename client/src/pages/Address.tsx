@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
-import type { Address } from "../types"
-import { dummyAddressData } from "../assets/assets"
 import { MapPinIcon, PlusIcon } from "lucide-react"
-import Loading from "../components/Loading"
+import { useEffect, useState } from "react"
+import { dummyAddressData } from "../assets/assets"
 import AddressCard from "../components/AddressCard"
 import AddressForm from "../components/AddressForm"
+import Loading from "../components/Loading"
+import type { Address } from "../types"
 
 
 const Address = () => {
@@ -36,7 +36,7 @@ const Address = () => {
       isDefault:add.isDefault
     })
 
-    setEditingId(add._id)
+    setEditingId(add.id)
     setShowForm(true)
   }
 
@@ -81,7 +81,7 @@ const Address = () => {
             <div className="space-y-4">
               {
                 addresses.map((addr)=>(
-                  <AddressCard key={addr._id} addr={addr}
+                  <AddressCard key={addr.id} addr={addr}
                   onEditHandler={onEditHandler} setAddresses={setAddresses}
                   />
                 ))

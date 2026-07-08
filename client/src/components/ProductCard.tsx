@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import type { Product } from "../types";
 import { Plus, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import type { Product } from "../types";
 
 
 interface Props {
@@ -14,7 +14,7 @@ const ProductCard = ({ product }: Props) => {
 
   return (
     <div
-      onClick={() => navigate(`/products/${product._id}`)}
+      onClick={() => navigate(`/products/${product.id}`)}
       className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-md transition-all duration-300 group animate-fate-in curser-pointer "
     >
       <div className="relative aspect-square overflow-hidden">

@@ -41,10 +41,10 @@ export function CartProvider({children}:{children:ReactNode}){
     const addToCart=(product:Product, quantity=1)=>{
 
         setItems((prev: any[])=>{
-            const existing=prev.find((item)=>item.product._id===product._id)
+            const existing=prev.find((item)=>item.product.id===product.id)
 
             if(existing){
-                return prev.map((item)=>(item.product._id === product._id ? {...
+                return prev.map((item)=>(item.product.id === product.id ? {...
                     item,quantity:item.quantity
 
                 }:item
@@ -59,7 +59,7 @@ export function CartProvider({children}:{children:ReactNode}){
 
       const removeFromCart=(productId:string)=>{
 
-        setItems((prev: any[])=>prev.filter((item)=>item.product._id !== productId))
+        setItems((prev: any[])=>prev.filter((item)=>item.product.id !== productId))
 
     }
 
@@ -70,7 +70,7 @@ export function CartProvider({children}:{children:ReactNode}){
         removeFromCart(productId)
         return
       }
-      setItems((prev: any[])=>prev.map((item)=>(item.product._id === productId ? {...
+      setItems((prev: any[])=>prev.map((item)=>(item.product.id === productId ? {...
         item,quantity
       }:item
     )))

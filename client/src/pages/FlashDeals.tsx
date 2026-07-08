@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
-import type { Product } from "../types"
-import { dummyProducts } from "../assets/assets"
 import { Zap } from "lucide-react"
+import { useEffect, useState } from "react"
+import { dummyProducts } from "../assets/assets"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
+import type { Product } from "../types"
 
 
 const FlashDeals = () => {
@@ -52,7 +52,7 @@ const FlashDeals = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4">
                 {
                   products.map((product)=>product.stock >0 && (
-                    <ProductCard key={product._id} product={product}/>
+                    <ProductCard key={product.id} product={product}/>
                   ))
                 }
 

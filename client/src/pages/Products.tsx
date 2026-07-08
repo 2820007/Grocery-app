@@ -1,11 +1,11 @@
-import {  useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import type { Product } from "../types"
-import { categoriesData, dummyProducts } from "../assets/assets"
 import { ChevronDown, Home, SlidersHorizontalIcon, XIcon } from "lucide-react"
-import ProductCard from "../components/ProductCard"
-import Loading from "../components/Loading"
+import { useEffect, useState } from "react"
+import { Link, useSearchParams } from "react-router-dom"
+import { categoriesData, dummyProducts } from "../assets/assets"
 import FilterPanel from "../components/FilterPanel"
+import Loading from "../components/Loading"
+import ProductCard from "../components/ProductCard"
+import type { Product } from "../types"
 
 
 
@@ -162,7 +162,7 @@ const Products = () => {
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 xl:gap-8">
                   {
                     products.map((product)=>product.stock >0 && (
-                      <ProductCard key={product._id}product={product}/>
+                      <ProductCard key={product.id}product={product}/>
                     ))
                   }
 

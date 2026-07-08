@@ -23,6 +23,9 @@ const port = process.env.PORT || 3000;
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
 });
+app.get("/hello", (req:Request, res:Response) => {
+  res.send("HELLO FROM SERVER");
+});
 
 //auth route
 app.use("/api/auth",authRoute)

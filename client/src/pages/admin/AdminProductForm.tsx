@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
 import { ArrowLeftIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { categoriesData, dummyProducts } from "../../assets/assets";
 import Loading from "../../components/Loading";
 
@@ -27,7 +27,7 @@ export default function AdminProductForm() {
     useEffect(() => {
         const fetchData = async () => {
             if (isEdit) {
-                setFormData(() => dummyProducts.find((p) => p._id === id) as any)
+                setFormData(() => dummyProducts.find((p) => p.id === id) as any)
             }
             setLoading(false)
         };

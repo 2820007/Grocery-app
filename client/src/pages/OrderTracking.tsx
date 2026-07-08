@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 
+import { ArrowLeftIcon, MapPinIcon, PhoneIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import type { Order } from "../types"
 import { dummyDashboardOrdersData } from "../assets/assets"
 import Loading from "../components/Loading"
-import { ArrowLeftIcon, MapPinIcon, PhoneIcon } from "lucide-react"
-import OrderOTP from "../components/OrderTracking/OrderOTP"
 import LiveMap from "../components/OrderTracking/LiveMap"
+import OrderOTP from "../components/OrderTracking/OrderOTP"
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine"
+import type { Order } from "../types"
 
 
 
@@ -22,7 +22,7 @@ const OrderTracking = () => {
   const [liveLocation,setLiveLocation]=useState<{lat:number; lng:number} | null>(null)
 
   useEffect(()=>{
-    setOrder(dummyDashboardOrdersData.find((o)=>o._id === id) as any)
+    setOrder(dummyDashboardOrdersData.find((o)=>o.id === id) as any)
     setLoading(false)
 
    
@@ -46,7 +46,7 @@ const OrderTracking = () => {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold text-app-green">Order #{order?._id.slice(-8).toUpperCase()}</h1>
+            <h1 className="text-2xl font-semibold text-app-green">Order #{order?.id.slice(-8).toUpperCase()}</h1>
             <p className="text-sm text-app-text-light">Placed on {new Date(order!.createdAt).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}</p>
           </div>
           <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${order!.status === "Delivered" ? "bg-green-100 text-green-700 ": order!.status === "Cancelled" ? "bg-red-100 text-red-700" :"bg-app-orange/10 text-app-orange"}`}>

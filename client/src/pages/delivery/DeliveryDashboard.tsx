@@ -1,11 +1,11 @@
+import { NavigationIcon, PackageIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { PackageIcon, NavigationIcon } from "lucide-react";
-import OtpModal from "../../components/Delivery/OtpModal";
+import { dummyDashboardOrdersData } from "../../assets/assets";
 import CancelModal from "../../components/Delivery/CancelModal";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
+import OtpModal from "../../components/Delivery/OtpModal";
 import Loading from "../../components/Loading";
 import type { Order } from "../../types";
-import { dummyDashboardOrdersData } from "../../assets/assets";
 
 export default function DeliveryDashboard() {
 
@@ -85,7 +85,7 @@ export default function DeliveryDashboard() {
                 </div>
             ) : (
                 <div className="space-y-4">
-                    {orders.map((order) => <DeliveryOrderCard key={order._id} order={order} tab={tab} handleUpdateStatus={handleUpdateStatus} setOtpModal={setOtpModal} setCancelModal={setCancelModal} />)}
+                    {orders.map((order) => <DeliveryOrderCard key={order.id} order={order} tab={tab} handleUpdateStatus={handleUpdateStatus} setOtpModal={setOtpModal} setCancelModal={setCancelModal} />)}
                 </div>
             )}
 
