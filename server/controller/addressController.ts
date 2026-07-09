@@ -64,7 +64,7 @@ export const addAddress=async(req:Request,res:Response)=>{
 
     })
 
-    res.status(201).json({addAddress})
+    res.status(201).json({addresses})
 
 }
 
@@ -75,9 +75,13 @@ export const addAddress=async(req:Request,res:Response)=>{
 export  const updateAddress=async(req:Request,res:Response)=>{
      const {label, address,city,state,zip, isDefault, lat,lng}=req.body
 
+     
+     
+
     //Require coordinates
     if(lat ==null || lng == null){
         return res.status(400).json({message:"Location coordinates are required. please allow location access."})
+
 
     }
     if(isDefault){
@@ -90,7 +94,7 @@ export  const updateAddress=async(req:Request,res:Response)=>{
 
     const data:any ={}
     if(label) data.label=label
-    if(address) data.Address=address
+    if(address) data.address=address
     if(city) data.city=city
     if(state) data.state=state
     if(zip) data.zip=zip

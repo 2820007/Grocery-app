@@ -1,6 +1,6 @@
 import { Zap } from "lucide-react"
 import { useEffect, useState } from "react"
-import { dummyProducts } from "../assets/assets"
+
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
 import type { Product } from "../types"

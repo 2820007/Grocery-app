@@ -12,7 +12,7 @@ const AddressForm = ({resetForm,handleSubmit,form, setForm,editingId}:any) => {
     {/* Form Container */}
 
     <div onClick={resetForm} className="fixed inset-0 flex-center p-4 ">
-        <form onClick={e=>e.stopPropagation()} className="bg-white rounded-2xl p-6 w-full max-w-lg animate-fade-in " >
+        <form onSubmit={handleSubmit}  onClick={e=>e.stopPropagation()} className="bg-white rounded-2xl p-6 w-full max-w-lg animate-fade-in " >
 
             {/* Form header */}
 

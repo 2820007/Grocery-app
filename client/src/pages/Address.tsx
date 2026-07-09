@@ -1,13 +1,17 @@
 import { MapPinIcon, PlusIcon } from "lucide-react"
 import { useEffect, useState } from "react"
-import { dummyAddressData } from "../assets/assets"
+
 import AddressCard from "../components/AddressCard"
 import AddressForm from "../components/AddressForm"
 import Loading from "../components/Loading"
 import type { Address } from "../types"
+import { useAuth } from "../context/AuthContext"
+import api from "../config/api"
+import toast from "react-hot-toast"
 
 
 const Address = () => {
+  const {updateUser}=useAuth()
   const [addresses,setAddresses]=useState<Address[]>([])
   const [loading,setLoading]=useState(true)
   const [showForm,setShowForm]=useState(false)
@@ -21,8 +25,78 @@ const Address = () => {
 
   }
 
+ const getLocation = (retries = 3): Promise<{ lat: number; lng: number }> => {
+  return new Promise((resolve, reject) => {
+    
+
+    if (!navigator.geolocation) {
+    
+      reject(new Error("Geolocation not supported"));
+      return;
+    }
+
+    const attempt = () => {
+      
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          
+
+          resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.log("Geolocation Error:", error);
+
+          if (retries > 0) {
+            retries--;
+            console.log("Retrying...");
+            setTimeout(attempt, 1000);
+          } else {
+            reject(new Error(error.message));
+          }
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 15000,
+          maximumAge: 60000,
+        }
+      );
+    };
+
+    attempt();
+  });
+};
+
   const handleSubmit=async (e:React.SubmitEvent)=>{
     e.preventDefault()
+   
+    try {
+      const coords=await getLocation()
+      console.log(coords)
+      const payload={...form, ...coords}
+      if(editingId){
+        const {data}=await api.put(`/addresses/${editingId}`,payload)
+        console.log("PUT to:", `/addresses/${editingId}`)
+        setAddresses(data.addresses)
+        updateUser({addresses:data.addresses})
+        toast.success("Address updated!")
+      }else{
+        const {data}=await api.post(`/addresses`,payload)
+          console.log(data);
+        
+        setAddresses(data.addresses)
+        updateUser({addresses:data.addresses})
+        toast.success("Address added!.")
+      }
+      resetForm()
+    } catch (error:any) {
+      toast.error(error.response?.data?.message || error.message || "Failed")
+
+      
+    }
 
   }
 
@@ -41,8 +115,14 @@ const Address = () => {
   }
 
   useEffect(()=>{
-    setAddresses(dummyAddressData)
-     setTimeout(()=>setLoading(false),1000)
+    api.get("/addresses").then(({data})=>{
+      setAddresses(data.addresses)
+    }).catch((error:any)=>{
+      toast.error(error.response?.data?.message || error?.message)
+
+    }).finally(()=>{
+      setLoading(false)
+    })
      
 
   },[])

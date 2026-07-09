@@ -10,7 +10,7 @@ import FlashDeals from "./pages/FlashDeals"
 import CheckOut from "./pages/CheckOut"
 import MyOrders from "./pages/MyOrders"
 import OrderTracking from "./pages/OrderTracking"
-import Address from "./pages/Address"
+
 import ProtectedRoute from "./components/ProtectedRoute"
 import AdminLayout from "./pages/admin/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
@@ -21,6 +21,7 @@ import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners"
 import DeliveryLogin from "./pages/delivery/DeliveryLogin"
 import DeliveryLayout from "./pages/delivery/DeliveryLayout"
 import DeliveryDashboard from "./pages/delivery/DeliveryDashboard"
+import Address from "./pages/Address"
 
 
 const App = () => {

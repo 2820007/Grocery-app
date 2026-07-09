@@ -1,12 +1,13 @@
 import { ArrowLeftIcon, ArrowRightIcon, HomeIcon, LeafIcon, MinusIcon, PlusIcon, ShoppingCartIcon, StarIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { dummyProducts } from "../assets/assets"
+
 import DummyReviewsSection from "../assets/DummyReviewsSection"
 import Loading from "../components/Loading"
 import ProductCard from "../components/ProductCard"
 import { useCart } from "../context/CartContext"
 import type { Product } from "../types"
+import api from "../config/api"
 
 
 const ProductDetail = () => {
@@ -24,10 +25,12 @@ const ProductDetail = () => {
     setLoading(true)
     setLocalQuantity(1)
     window.scrollTo(0,0)
-    const product=dummyProducts.find((p)=>p.id ===id)
-    setProduct(product!)
-    setRelatedProduct(dummyProducts.filter((p)=>p.id !==id))
-    setLoading(false)
+    api.get(`/products/${id}`).then(({data})=>{
+      setProduct(data.product)
+      return api.get(`/products?category=${data.product.category}`)
+    }).then(({data})=>{
+      setRelatedProduct(data.products.filter((p:Product)=>p.id !==id))
+    }).catch(()=>navigate("/products")).finally(()=>setLoading(false))
 
   },[id,navigate])
 
