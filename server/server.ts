@@ -12,7 +12,11 @@ import addressRouter from "./routes/addressRoutes.js";
 import adminRouter from "./routes/adminRoute.js";
 import deliveryPartnerRouter from "./routes/deliveryPartnerRoute.js";
 
+
+
+
 const app = express();
+
 
 // Middleware
 app.use(cors())
@@ -20,12 +24,16 @@ app.use(express.json());
 
 const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Server is Live!');
+app.get("/", (req, res) => {
+  res.send("SERVER CHANGED 12345");
 });
-app.get("/hello", (req:Request, res:Response) => {
-  res.send("HELLO FROM SERVER");
+app.get("/api/admin/test", (req:Request, res:Response) => {
+  res.send("This is admin test api");
 });
+
+
+
+
 
 //auth route
 app.use("/api/auth",authRoute)
@@ -43,7 +51,11 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 
 //Address
 app.use("/api/addresses",addressRouter)
+
+
+
 //Admin
+
 app.use("/api/admin",adminRouter)
 //Delivery
 app.use("/api/delivery",deliveryPartnerRouter)
@@ -54,6 +66,7 @@ app.use((error:any, req:Request,res:Response,next:NextFunction)=>{
     res.status(500).json({message:error.message})
 
 })
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

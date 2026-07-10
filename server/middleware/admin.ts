@@ -2,39 +2,49 @@ import { Response,Request,NextFunction } from "express";
 import { prisma } from "../config/prisma.js";
 
 
-const admin=async (req:Request,res:Response,next:NextFunction)=>{
+const admin = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log("Admin middleware reached");
+        const userId = req.user?.id;
 
-        const userId=req.user?.id
-
-        if(!userId){
-            return res.status(401).json({message:"Unauthorized"})
-
-
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized" });
         }
 
-        const user=await prisma.user.findUnique({where:{id:userId}})
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
 
-        if(!user){
-            return res.status(404).json({message:"User not found"})
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const adminEmails=process.env.ADMIN_EMAIL? process.env.ADMIN_EMAIL.split(",").map((e)=>e.trim().toLowerCase()):[]
+        const adminEmails = process.env.ADMIN_EMAIL
+            ? process.env.ADMIN_EMAIL
+                  .split(",")
+                  .map((e) => e.trim().toLowerCase())
+            : [];
 
-        if(adminEmails.includes(user.email.toLowerCase())){
-            if(req.user) req.user.isAdmin=true
-        }else{
-            res.status(403).json({message:"Admin access required"})
+        if (!adminEmails.includes(user.email.toLowerCase())) {
+            return res.status(403).json({
+                message: "Admin access required",
+            });
         }
 
-        
+        if (req.user) {
+            req.user.isAdmin = true;
+        }
+        console.log("Admin passed");
 
-        
-    } catch (error:any) {
-        console.log(error)
-        return res.status(400).json({message:"Admin verification failed",error:error.message})
-        
+        next();
+    } catch (error: any) {
+        console.log(error);
+        return res.status(400).json({
+            message: "Admin verification failed",
+            error: error.message,
+        });
     }
-}
+};
 
-export default admin
+export default admin;
+

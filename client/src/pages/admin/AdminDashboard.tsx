@@ -1,8 +1,9 @@
 import { AlertTriangleIcon, PackageIcon, ShoppingBagIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { dummyAdminDashboardData, statusColors } from "../../assets/assets";
+import {  statusColors } from "../../assets/assets";
 import Loading from "../../components/Loading";
+import api from "../../config/api";
 
 interface Stats {
     totalOrders: number;
@@ -20,13 +21,24 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        setTimeout(() => {
-            setStats(dummyAdminDashboardData);
+    setLoading(true);
+
+    api.get("/admin/stats")
+        .then((res) => {
+            console.log("Response:", res.data);
+            setStats(res.data);
+        })
+        .catch((err) => {
+            console.log("API Error:", err);
+        })
+        .finally(() => {
+            console.log("Finally");
             setLoading(false);
-        }, 1000);
-    }, []);
+        });
+}, []);
 
     const cards = stats
+
         ? [
             { label: "Total Orders", value: stats.totalOrders, icon: ShoppingBagIcon },
             { label: "Total Users", value: stats.totalUsers, icon: UsersIcon },

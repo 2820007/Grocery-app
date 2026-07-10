@@ -3,31 +3,71 @@ import { prisma } from "../config/prisma.js"
 import bcrypt  from 'bcrypt';
 
 //get admin dashboard data
-export const getAdminStas=async(req:Request,res:Response)=>{
 
-    const [totalOrders,totalUsers,totalProducts,outOfStock,totalPartners,recentOrders]=await Promise.all([
-        prisma.order.count({where:{NOT:[{paymentMethod:"card",isPaid:false}]}}),
-        prisma.user.count(),
-        prisma.product.count(),
-        prisma.product.count({where:{stock:0}}),
-        prisma.deliveryPartner.count(),
-        prisma.order.findMany({
-            where:{NOT:[{paymentMethod:"card",isPaid:false}]},
-            orderBy:{createdAt:"asc"},
-            take:8,
-            include:{
-            user:{select:{name:true,email:true}},
-            DeliveryPartner:{select:{name:true,phone:true}}
+export const getAdminStats = async (req: Request, res: Response) => {
+    console.log("Controller Hit");
+    console.log("hi am in admin controller")
+  try {
+    const [
+      totalOrders,
+      totalUsers,
+      totalProducts,
+      outOfStock,
+      totalPartners,
+      recentOrders,
+    ] = await Promise.all([
+      prisma.order.count({
+        where: {
+          NOT: [{ paymentMethod: "card", isPaid: false }],
         },
-           
-        })
+      }),
+      prisma.user.count(),
+      prisma.product.count(),
+      prisma.product.count({
+        where: { stock: 0 },
+      }),
+      prisma.deliveryPartner.count(),
+      prisma.order.findMany({
+        where: {
+          NOT: [{ paymentMethod: "card", isPaid: false }],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: 8,
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          DeliveryPartner: {
+            select: {
+              name: true,
+              phone: true,
+            },
+          },
+        },
+      }),
+    ]);
 
-
-    ])
-
-    res.json({totalOrders,totalUsers,totalProducts,outOfStock,recentOrders,totalPartners})
-
-}
+    return res.json({
+      totalOrders,
+      totalUsers,
+      totalProducts,
+      outOfStock,
+      totalPartners,
+      recentOrders,
+    });
+  } catch (error) {
+    console.error("Admin Stats Error:", error);
+    return res.status(500).json({
+      message: "Failed to load dashboard stats",
+      error,
+    });
+  }
+};
 
 
 //get delivery partner list for admin
