@@ -83,31 +83,72 @@ export default function DeliveryDashboard() {
             
         })
 
+
+        //also send on interval for more consistent updates
+
+        const interval=setInterval(()=>{
+            navigator.geolocation.getCurrentPosition(sendLocation,
+               ()=>{},{enableHighAccuracy:true} 
+            )
+        },1000)
+
+        return ()=>{
+            if(watchIdRef.current !==null){
+                navigator.geolocation.clearWatch(watchIdRef.current)
+                watchIdRef.current=null
+            }
+            clearInterval(interval)
+        }
+
     },[orders,tracking])
 
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
-        console.log(orderId, status);
+        try {
+            await axios.put(`${API_URL}/delivery/my-deliveries/${orderId}/status`,{status},getAuthHeaders())
+            toast.success(`Status updated to ${status}`)
+            fetchOrders()
+            
+        } catch (error:any) {
+             toast.error(error.response?.data?.message || "Failed ")
+
+            
+        }
     };
 
     const handleComplete = async () => {
         if (!otpModal || !otp) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
-            setOtpModal(null);
-            setOtp("");
-        }, 1000);
+        try {
+            await axios.put(`${API_URL}/delivery/my-deliveries/${otpModal}/complete`,{otp},getAuthHeaders())
+             toast.success("Delivery completed")
+             setOtpModal(null)
+             setOtp("")
+             fetchOrders()
+        } catch (error:any) {
+            toast.error(error.response?.data?.message || error?.message)
+            
+        }finally{
+            setSubmitting(false)
+        }
     };
 
     const handleCancel = async () => {
         if (!cancelModal) return;
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
-            setCancelModal(null);
-            setCancelReason("");
-        }, 1000);
+        try {
+            await axios.put(`${API_URL}/delivery/my-deliveries/${cancelModal}/cancel`,{reason:cancelReason},getAuthHeaders())
+             toast.success("Delivery cancel")
+             setCancelModal(null)
+             setCancelReason("")
+             fetchOrders()
+        } catch (error:any) {
+            toast.error(error.response?.data?.message || "Failed")
+            
+        }finally{
+            setSubmitting(false)
+        }
+       
     }
 
     return (
