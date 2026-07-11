@@ -42,7 +42,7 @@ export const getAdminStats = async (req: Request, res: Response) => {
               email: true,
             },
           },
-          DeliveryPartner: {
+          deliveryPartner: {
             select: {
               name: true,
               phone: true,
@@ -104,7 +104,7 @@ export const updateDeliveryPartner=async(req:Request,res:Response)=>{
     if(name) data.name=name
     if(phone) data.phone=phone
     if(vehicleType) data.vehicleType=vehicleType
-    if(isActive) data.isActive=isActive
+    data.isActive=isActive
 
     try {
 

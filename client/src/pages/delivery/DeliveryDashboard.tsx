@@ -1,11 +1,22 @@
 import { NavigationIcon, PackageIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { dummyDashboardOrdersData } from "../../assets/assets";
 import CancelModal from "../../components/Delivery/CancelModal";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
 import OtpModal from "../../components/Delivery/OtpModal";
 import Loading from "../../components/Loading";
 import type { Order } from "../../types";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+
+
+const API_URL=import.meta.env.VITE_BASE_URL || "http://localhost:9000/api"
+
+
+const getAuthHeaders=()=>({
+    headers:{Authorization:`Bearer ${localStorage.getItem("delivery_token")}`}
+})
 
 export default function DeliveryDashboard() {
 
@@ -13,6 +24,7 @@ export default function DeliveryDashboard() {
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState<"active" | "completed">("active");
     const [tracking, setTracking] = useState(false);
+    const watchIdRef=useRef<number | null>(null)
 
     // OTP modal
     const [otpModal, setOtpModal] = useState<string | null>(null);
@@ -25,13 +37,54 @@ export default function DeliveryDashboard() {
 
     const fetchOrders = async () => {
         setLoading(true);
-        setOrders(dummyDashboardOrdersData as any);
-        setLoading(false);
+        try {
+            const {data}=await axios.get(`${API_URL}/delivery/my-deliveries?status=${tab}`,getAuthHeaders())
+            setOrders(data.orders)
+            
+        } catch (error:any) {
+             toast.error(error.response?.data?.message || "Failed to load deliveries")
+            
+        }finally{
+              setLoading(false);
+
+        }
+      
     };
 
+    
     useEffect(() => {
         fetchOrders();
     }, [tab]);
+
+    //send location every 10s for active deliveries
+    useEffect(()=>{
+        const activeOrder=orders.filter((o)=>["Assigned","Packed","Out fo Delivery"].includes(o.status))
+        if(activeOrder.length ===0 || !tracking){
+            if(watchIdRef.current !==null){
+                navigator.geolocation.clearWatch(watchIdRef.current)
+                watchIdRef.current=null
+            }
+            return
+
+        }
+
+        const sendLocation=(pos:GeolocationPosition)=>{
+            const {latitude:lat, longitude:lng}=pos.coords
+            activeOrder.forEach((order)=>{
+                axios.put(`${API_URL}/delivery/my-deliveries/${order.id}/location`,{
+                    lat,lng
+                },getAuthHeaders()).catch(()=>{})
+            })
+
+        }
+        watchIdRef.current=navigator.geolocation.watchPosition(sendLocation,()=>{},{
+            enableHighAccuracy:true,
+            maximumAge:10000,
+            
+        })
+
+    },[orders,tracking])
+
 
     const handleUpdateStatus = async (orderId: string, status: string) => {
         console.log(orderId, status);

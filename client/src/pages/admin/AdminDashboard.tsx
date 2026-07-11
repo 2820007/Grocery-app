@@ -25,14 +25,14 @@ export default function AdminDashboard() {
 
     api.get("/admin/stats")
         .then((res) => {
-            console.log("Response:", res.data);
+          
             setStats(res.data);
         })
         .catch((err) => {
             console.log("API Error:", err);
         })
         .finally(() => {
-            console.log("Finally");
+            
             setLoading(false);
         });
 }, []);
