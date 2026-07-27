@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyAddressData } from "../assets/assets";
+
 import CheckoutAddress from "../components/Checkout/CheckoutAddress";
 import CheckoutPayment from "../components/Checkout/CheckoutPayment";
 import CheckoutReview from "../components/Checkout/CheckoutReview";
@@ -66,7 +66,12 @@ const CheckOut = () => {
       }
 
       const {data}=await api.post("/orders",orderData)
-      console.log(data)
+      
+
+console.log("Response:", data);
+console.log("URL:", data.url);
+console.log("Order:", data.order);
+      
 
       if(data.url){
         window.location.href=data.url

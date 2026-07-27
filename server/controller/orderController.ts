@@ -3,7 +3,9 @@ import { prisma } from "../config/prisma.js";
 
 import { inngest } from "../inngest/index.js";
 import Stripe from "stripe"
-import { url } from "node:inspector";
+
+
+
 
 
 //create order
@@ -11,6 +13,7 @@ import { url } from "node:inspector";
 
 export const createOrder = async (req: Request, res: Response) => {
   const { items, shippingAddress, paymentMethod } = req.body;
+  console.log("=== createOrder called ===");
   //check if order item are empty
 
   if (!items || items.length === 0) {
@@ -77,7 +80,11 @@ export const createOrder = async (req: Request, res: Response) => {
     },
   });
 
-  if (paymentMethod === "card") {
+
+  console.log("Payment method:", paymentMethod);
+console.log("About to check Stripe condition");
+
+ if (paymentMethod === "card") {
     const stripe=new Stripe(process.env.STRIPE_SECRET_KEY as string)
      
     //create session
@@ -102,6 +109,17 @@ export const createOrder = async (req: Request, res: Response) => {
       metadata:{orderId:order.id}
     });
     return res.json({url:session.url})
+  }
+
+  res.json({ order });
+
+  //Decrease stock
+
+  for (const item of orderItems) {
+    await prisma.product.update({
+      where: { id: item.product },
+      data: { stock: { decrement: item.quantity } },
+    });
   }
 
   res.json({ order });

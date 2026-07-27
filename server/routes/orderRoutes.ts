@@ -6,6 +6,7 @@ import admin from '../middleware/admin.js';
 const orderRouter=express.Router()
 
 orderRouter.post("/",auth,createOrder)
+
 orderRouter.get("/",auth,getUserOrders)
 orderRouter.get("/all",auth,admin,getAllOrders)
 orderRouter.get("/:id",auth,getOrder)

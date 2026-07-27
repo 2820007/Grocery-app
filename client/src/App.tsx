@@ -24,6 +24,7 @@ import DeliveryDashboard from "./pages/delivery/DeliveryDashboard"
 import Address from "./pages/Address"
 
 
+
 const App = () => {
   return (
      <>
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="products/:id" element={<ProductDetail/>}/>
             <Route path="search" element={<SearchResults/>}/>
             <Route path="deals" element={<FlashDeals/>}/>
+             {/* <Route path="about" element={</>}/> */}
 
              {/* protected route */}
             <Route element={<ProtectedRoute/>} >

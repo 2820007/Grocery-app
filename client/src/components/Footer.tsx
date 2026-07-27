@@ -4,35 +4,36 @@ import { footerData } from "../assets/assets";
 
 const Footer = () => {
   return (
-    <footer className="bg-app-green text-white mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
-        {/* Top Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          
-          {/* Brand Column */}
-          <div>
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <BikeIcon className="size-6" />
-              <span className="text-xl font-semibold">
-                {footerData.brand.name}
-              </span>
+    <footer className="bg-app-green text-white mt-20">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-14">
+
+        {/* Top */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+
+          {/* Brand */}
+          <div className="space-y-5">
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-2xl font-bold"
+            >
+              <BikeIcon className="w-7 h-7" />
+              <span>{footerData.brand.name}</span>
             </Link>
 
-            <p className="text-sm text-white/70 leading-6 mb-5">
+            <p className="text-white/70 leading-7 text-sm">
               {footerData.brand.description}
             </p>
 
-            <div className="flex gap-3">
-              {footerData.brand.socials.map((social, i) => (
+            <div className="flex items-center gap-3">
+              {footerData.brand.socials.map((social, index) => (
                 <a
-                  key={i}
+                  key={index}
                   href={social.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition flex items-center justify-center"
+                  className="w-11 h-11 rounded-xl bg-white/10 hover:bg-white hover:text-app-green transition-all duration-300 flex items-center justify-center hover:-translate-y-1"
                 >
-                  <social.icon className="w-4 h-4" />
+                  <social.icon size={18} />
                 </a>
               ))}
             </div>
@@ -40,98 +41,117 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-5">
               Quick Links
             </h3>
 
             <ul className="space-y-3">
-              <li>
-                <Link
-                  to="/"
-                  className="text-white/70 hover:text-white transition"
-                >
-                  Home
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/products"
-                  className="text-white/70 hover:text-white transition"
-                >
-                  Products
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/about"
-                  className="text-white/70 hover:text-white transition"
-                >
-                  About Us
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/contact"
-                  className="text-white/70 hover:text-white transition"
-                >
-                  Contact
-                </Link>
-              </li>
+              {[
+                { name: "Home", path: "/" },
+                { name: "Products", path: "/products" },
+                { name: "About", path: "/about" },
+                { name: "Contact", path: "/contact" },
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    className="text-white/70 hover:text-white hover:translate-x-1 transition-all inline-block"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-5">
               Categories
             </h3>
 
             <ul className="space-y-3">
-              <li className="text-white/70">Vegetables</li>
-              <li className="text-white/70">Fruits</li>
-              <li className="text-white/70">Dairy Products</li>
-              <li className="text-white/70">Bakery</li>
-              <li className="text-white/70">Beverages</li>
+              {[
+                "Vegetables",
+                "Fruits",
+                "Dairy Products",
+                "Bakery",
+                "Beverages",
+              ].map((item) => (
+                <li
+                  key={item}
+                  className="text-white/70 hover:text-white transition cursor-pointer"
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-5">
               Contact Us
             </h3>
 
-            <div className="space-y-3 text-white/70">
-              <p>📍 Kathmandu, Nepal</p>
-              <p>📞 +977 9800000000</p>
-              <p>✉️ support@grocery.com</p>
+            <div className="space-y-4 text-white/70">
+
+              <div className="flex gap-3">
+                <span>📍</span>
+                <span>Kathmandu, Nepal</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span>📞</span>
+                <span>+977 9800000000</span>
+              </div>
+
+              <div className="flex gap-3">
+                <span>✉️</span>
+                <span>support@grocery.com</span>
+              </div>
+
             </div>
           </div>
+
         </div>
 
         {/* Divider */}
-        <div className="border-t border-white/10 my-8"></div>
 
-        {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/60">
-          <p>
-            © {new Date().getFullYear()} {footerData.brand.name}. All rights
-            reserved.
+        <div className="border-t border-white/10 my-10"></div>
+
+        {/* Bottom */}
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-5 text-sm text-white/60">
+
+          <p className="text-center md:text-left">
+            © {new Date().getFullYear()}{" "}
+            <span className="font-semibold">
+              {footerData.brand.name}
+            </span>
+            . All Rights Reserved.
           </p>
 
-          <div className="flex gap-6">
-            <Link to="/privacy" className="hover:text-white transition">
+          <div className="flex flex-wrap justify-center gap-6">
+
+            <Link
+              to="/privacy"
+              className="hover:text-white transition"
+            >
               Privacy Policy
             </Link>
 
-            <Link to="/terms" className="hover:text-white transition">
+            <Link
+              to="/terms"
+              className="hover:text-white transition"
+            >
               Terms & Conditions
             </Link>
+
           </div>
+
         </div>
+
       </div>
     </footer>
   );
