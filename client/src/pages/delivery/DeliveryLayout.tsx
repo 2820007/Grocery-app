@@ -8,14 +8,26 @@ export default function DeliveryLayout() {
     const navigate = useNavigate();
     const [partner, setPartner] = useState<DeliveryPartner | null>(null);
 
-    useEffect(() => {
-        const saved=localStorage.getItem("delivery_partner")
-        const token=localStorage.getItem("delivery_token")
-        if(!saved || !token){
-            navigate("/delivery/login")
-        }
-        setPartner(JSON.parse(saved))
-    }, [navigate]);
+   useEffect(() => {
+    const saved = localStorage.getItem("delivery_partner");
+    const token = localStorage.getItem("delivery_token");
+
+    if (!saved || !token) {
+        navigate("/delivery/login");
+        return;
+    }
+
+    try {
+        const partnerData: DeliveryPartner = JSON.parse(saved);
+        setPartner(partnerData);
+    } catch (error) {
+        console.error("Failed to parse delivery partner:", error);
+        localStorage.removeItem("delivery_partner");
+        localStorage.removeItem("delivery_token");
+        navigate("/delivery/login");
+    }
+
+}, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem("delivery_partner")
