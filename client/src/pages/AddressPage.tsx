@@ -10,7 +10,7 @@ import api from "../config/api"
 import toast from "react-hot-toast"
 
 
-const Address = () => {
+const AddressPage = () => {
   const {updateUser}=useAuth()
   const [addresses,setAddresses]=useState<Address[]>([])
   const [loading,setLoading]=useState(true)
@@ -177,4 +177,4 @@ const Address = () => {
   )
 }
 
-export default Address
+export default AddressPage

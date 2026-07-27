@@ -21,7 +21,8 @@ import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners"
 import DeliveryLogin from "./pages/delivery/DeliveryLogin"
 import DeliveryLayout from "./pages/delivery/DeliveryLayout"
 import DeliveryDashboard from "./pages/delivery/DeliveryDashboard"
-import Address from "./pages/Address"
+
+import AddressPage from "./pages/AddressPage"
 
 
 
@@ -55,7 +56,7 @@ const App = () => {
                 <Route path="checkout" element={<CheckOut/>}/>
                 <Route path="orders" element={<MyOrders/>}/>
                 <Route path="orders/:id" element={<OrderTracking/>}/>
-                <Route path="address" element={<Address/>}/>
+                <Route path="address" element={<AddressPage/>}/>
 
 
 
