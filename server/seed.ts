@@ -1,8 +1,32 @@
+import bcrypt from "bcrypt"
 import { prisma } from "./config/prisma.js"
 import { Prisma } from "./generated/prisma/client.js"
 
 const seedDB=async()=>{
     try {
+        const adminEmail = "dot123com456@gmail.com"
+        const adminPassword = "Raviadmin"
+        const hashedAdminPassword = await bcrypt.hash(adminPassword, 10)
+
+        await prisma.user.upsert({
+            where: { email: adminEmail.toLowerCase() },
+            update: {
+                name: "Admin",
+                password: hashedAdminPassword,
+                phone: "",
+                avatar: "",
+            },
+            create: {
+                name: "Admin",
+                email: adminEmail.toLowerCase(),
+                password: hashedAdminPassword,
+                phone: "",
+                avatar: "",
+            },
+        })
+
+        console.log(`Seeded admin account: ${adminEmail} / Raviadmin`)
+
         await prisma.product.deleteMany({})
         console.log("clear existing products")
         const products:Prisma.ProductCreateManyInput[]=[
